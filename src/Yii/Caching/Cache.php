@@ -7,6 +7,7 @@
 
 namespace Yii2tech\Illuminate\Yii\Caching;
 
+use Illuminate\Cache\CacheManager;
 use Illuminate\Contracts\Cache\Repository;
 
 /**
@@ -35,7 +36,7 @@ use Illuminate\Contracts\Cache\Repository;
  * @see \yii\caching\Cache::$serializer
  * @see \Illuminate\Contracts\Cache\Repository
  *
- * @property \Illuminate\Contracts\Cache\Repository $illuminateCache related Laravel cache repository.
+ * @property \Illuminate\Contracts\Cache\Repository | \Illuminate\Cache\CacheManager $illuminateCache related Laravel cache repository.
  *
  * @author Paul Klimov <klimov.paul@gmail.com>
  * @since 1.0
@@ -43,14 +44,14 @@ use Illuminate\Contracts\Cache\Repository;
 class Cache extends \yii\caching\Cache
 {
     /**
-     * @var \Illuminate\Contracts\Cache\Repository related Laravel cache repository.
+     * @var \Illuminate\Contracts\Cache\Repository | \Illuminate\Cache\CacheManager related Laravel cache repository.
      */
     private $_illuminateCache;
 
     /**
-     * @return \Illuminate\Contracts\Cache\Repository
+     * @return \Illuminate\Contracts\Cache\Repository | \Illuminate\Cache\CacheManager
      */
-    public function getIlluminateCache(): Repository
+    public function getIlluminateCache(): Repository | CacheManager
     {
         if ($this->_illuminateCache === null) {
             $this->_illuminateCache = $this->defaultIlluminateCache();
@@ -60,10 +61,10 @@ class Cache extends \yii\caching\Cache
     }
 
     /**
-     * @param  \Illuminate\Contracts\Cache\Repository  $illuminateCache
+     * @param  \Illuminate\Contracts\Cache\Repository | \Illuminate\Cache\CacheManager $illuminateCache
      * @return static self reference.
      */
-    public function setIlluminateCache(Repository $illuminateCache): self
+    public function setIlluminateCache(Repository | CacheManager $illuminateCache): self
     {
         $this->_illuminateCache = $illuminateCache;
 
@@ -71,9 +72,9 @@ class Cache extends \yii\caching\Cache
     }
 
     /**
-     * @return \Illuminate\Contracts\Cache\Repository default cache repository.
+     * @return \Illuminate\Contracts\Cache\Repository | \Illuminate\Cache\CacheManager default cache repository.
      */
-    protected function defaultIlluminateCache(): Repository
+    protected function defaultIlluminateCache(): Repository | CacheManager
     {
         return \Illuminate\Support\Facades\Cache::getFacadeRoot();
     }
